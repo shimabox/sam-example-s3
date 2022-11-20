@@ -5,10 +5,22 @@ Description: >
 
   Sample SAM Template for sam-example-s3
 
+Parameters:
+  LambdaRoleArn:
+    Type: String
+  ReadBucket:
+    Type: String
+  OutputBucket:
+    Type: String
+
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
     Timeout: 3
+    # 環境変数の設定
+    Environment:
+      Variables:
+        OutputBucket: !Ref OutputBucket
 
 Resources:
   HelloWorldFunction:
@@ -19,3 +31,30 @@ Resources:
       Runtime: python3.9
       Architectures:
         - x86_64
+      # ロールの設定
+      Role: !Ref LambdaRoleArn
+      # レイヤーの参照
+      Layers:
+        - !Ref MyLayerPyminizip
+  ## パーミッションの追加
+  S3Permission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName: !Ref HelloWorldFunction
+      Principal: s3.amazonaws.com
+      SourceAccount: !Ref 'AWS::AccountId'
+      SourceArn: !Sub arn:aws:s3:::${ReadBucket}
+  ## レイヤーの作成
+  MyLayerPyminizip:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: 'mylayer-pyminizip/'
+      CompatibleRuntimes:
+        - python3.9
+    Metadata:
+      BuildMethod: python3.9
+
+Outputs:
+  MyFunctionArn:
+    Value: !GetAtt HelloWorldFunction.Arn
