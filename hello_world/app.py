@@ -31,7 +31,7 @@ def lambda_handler (event, context):
 
         # もうひとつのパケットに書き込む
         # 環境変数から書き出し先のバケット名を取
-        destbucketname = os.environ['OUTPUTBUCKET']
+        destbucketname = os.environ['OutputBucket']
 
         # ファイルにアクセスするためのオブジェクトを取得
         obj2 = s3.Object(destbucketname, filename + '.zip')
