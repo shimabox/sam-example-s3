@@ -1,6 +1,7 @@
 import boto3
 import tempfile
 import os
+import pyminizip
 
 def lambda_handler (event, context):
     # S3にアクセスするためのオブジェクトを取得
@@ -19,19 +20,25 @@ def lambda_handler (event, context):
         # 一時ディレクトリにダウンロード
         localfilename = os.path.join(tmpdir.name, filename)
         fp = open(localfilename, 'wb')
-        fp.write(response ['Body'].read())
+        fp.write(response['Body'].read())
         fp.close()
+
+        # 暗号化する
+        # パスワードは仮に「mypassword」とする
+        zipfilename = tempfile.mkstemp(suffix='.zip')[1]
+        os.chdir(tmpdir.name)
+        pyminizip.compress(localfilename, None, zipfilename, 'mypassword', 0)
 
         # もうひとつのパケットに書き込む
         # 環境変数から書き出し先のバケット名を取
         destbucketname = os.environ['OUTPUTBUCKET']
 
         # ファイルにアクセスするためのオブジェクトを取得
-        obj2 = s3.Object(destbucketname, filename)
+        obj2 = s3.Object(destbucketname, filename + '.zip')
 
         # アップロード
         response = obj2.put(
-            Body = open(localfilename, 'rb')
+            Body = open(zipfilename, 'rb')
         )
 
         # 一時ファイルのクリーンアップ
