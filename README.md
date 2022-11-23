@@ -1,6 +1,6 @@
 # sam-example-s3
 
-[AWS Lambda実践ガイド 第2版](https://www.amazon.co.jp//dp/4295013307 "AWS Lambda実践ガイド 第2版 (impress top gear) | 大澤 文孝 |本 | 通販 | Amazon") 第5章の写経です。  
+[AWS Lambda実践ガイド 第2版](https://www.amazon.co.jp/dp/4295013307 "AWS Lambda実践ガイド 第2版 (impress top gear) | 大澤 文孝 |本 | 通販 | Amazon") 第5章の写経です。  
 ※ 厳密には、5-7までです
 
 ## 前提条件
@@ -169,7 +169,7 @@ $ aws s3api put-bucket-notification-configuration \
       \"Events\": [\"s3:ObjectCreated:*\"]}]}"
 ```
 
-## 確認
+## :fire: 確認 :fire:
 
 配置用S3バケットに適当なファイルをアップロードして、出力用S3バケットにzipが出力されていればOKです:+1:
 
