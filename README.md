@@ -173,6 +173,10 @@ $ aws s3api put-bucket-notification-configuration \
 
 配置用S3バケットに適当なファイルをアップロードして、出力用S3バケットにzipが出力されていればOKです:+1:
 
+### 備考
+
+`tests` は何も修正していません。
+
 ## 参考
 
 - [AWS Lambdaで使いたい環境変数をAWS SAM CLIでどうするか - Qiita](https://qiita.com/c3drive/items/9c1ed0686dc3aec88935 "AWS Lambdaで使いたい環境変数をAWS SAM CLIでどうするか - Qiita")
